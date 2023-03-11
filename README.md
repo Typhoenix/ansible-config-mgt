@@ -1,2 +1,2 @@
 # ansible-config-mgt.
-### test confiq
+### test confiq.
