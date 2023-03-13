@@ -1,23 +1,39 @@
- ---
-- name: update webservers, nfs 
-  hosts: webservers, nfs
+ - name: Update Wireshark on webservers and NFS servers
+  hosts: webservers,nfs
   remote_user: ec2-user
-  become: yes
-  become_user: root
+  become: true
   tasks:
-  - name: ensure wireshark is at the latest version
-    yum:
-      name: wireshark
-      state: latest
+    - name: Ensure Wireshark is at the latest version
+      yum:
+        name: wireshark
+        state: latest
+      register: yum_result
+    - name: Handle errors for yum module
+      block:
+        - debug:
+            var: yum_result
+        - fail:
+            msg: "Failed to update Wireshark"
+      rescue:
+        - debug:
+            msg: "An error occurred while updating Wireshark"
 
-- name: update LB server, db
-  hosts: lb, db
+- name: Update Wireshark on load balancers and databases
+  hosts: lb,db
   remote_user: ubuntu
-  become: yes
-  become_user: root
+  become: true
   tasks:
-  - name: ensure wireshark is at the latest version
-    apt:
-      name: wireshark
-      state: latest
-
+    - name: Ensure Wireshark is at the latest version
+      apt:
+        name: wireshark
+        state: latest
+      register: apt_result
+    - name: Handle errors for apt module
+      block:
+        - debug:
+            var: apt_result
+        - fail:
+            msg: "Failed to update Wireshark"
+      rescue:
+        - debug:
+            msg: "An error occurred while updating Wireshark"
