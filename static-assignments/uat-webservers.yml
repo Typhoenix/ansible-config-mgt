@@ -1,6 +1,5 @@
 ---
-- name: Example playbook
-  hosts: uat-webservers
-  become: yes
+- hosts: uat-webservers
   roles:
-    - webserver
+     - webserver
+
